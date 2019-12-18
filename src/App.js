@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import { User } from'./User';
 
 class App {
     constructor() {
@@ -7,16 +8,17 @@ class App {
         this._app.use(express.json());
         this._app.use(express.static(path.resolve(__dirname, '../public')));
 
-        // this._app.get('/', this.onGet);
+        this._app.get('/users', this.onGet);
         // this._app.post('/', this.onPost);
         // this._app.put('/', this.onPut);
     }
 
-    // onGet = (request, response) => {
-    //     const { body } = request;
+    onGet = (request, response) => {
+        const { body } = User.readAll;
 
-    //     response.end();
-    // }
+        response.json({body});
+        response.end();
+    }
 
     // onPost = (request, response) => {
     //     const { body } = request;
