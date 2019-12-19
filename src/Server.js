@@ -9,9 +9,10 @@ class Server {
         this._server = http.createServer(this._app.getApp());
     }
 
-    init = () => {
-        console.log('Server Has Been Started on port: ', this._port);
-        this._server.listen(this._port);
+    init = () => {       
+        this._server.listen(this._port, () => {
+            console.log('Server Has Been Started on port: ', this._port);
+        });
     }
 }
 
