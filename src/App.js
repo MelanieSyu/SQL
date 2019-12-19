@@ -1,36 +1,38 @@
-import express from 'express';
+import express, { response } from 'express';
 import path from 'path';
-import { User } from'./User';
+import Postgree_DAL from './postgree_DAL';
 
 class App {
     constructor() {
         this._app = express();
         this._app.use(express.json());
-        this._app.use(express.static(path.resolve(__dirname, '../public')));
-
-        this._app.get('/users', this.onGet);
-        // this._app.post('/', this.onPost);
-        // this._app.put('/', this.onPut);
+        this._app.use('/',express.static(path.resolve(__dirname, '../public')));
+        this._db = new Postgree_DAL();
+        this._app.get('/persons', this.onGet);
+        this._app.post('/persons', this.onPost);
+        this._app.put('/persons', this.onPut);
+        this._app.delete('/persons', this.onDelete);
     }
 
     onGet = (request, response) => {
-        const { body } = User.readAll;
-
-        response.json({body});
+        this._db.read(request.query);
         response.end();
     }
 
-    // onPost = (request, response) => {
-    //     const { body } = request;
+    onPost = (request, response) => {
+        this._db.create(request.body);
+        response.end();
+    }
 
-    //     response.end();
-    // }
+    onPut = (request, response) => {
+        this._db.update(request.body);
+        response.end();
+    }
 
-    // onPut = (request, response) => {
-    //     const { body } = request;
-
-    //     response.end();
-    // }
+    onDelete = (request, response) => {
+        this._db.delete(request.body);
+        response.end();
+    }
 
     getApp = () => this._app;
 }
